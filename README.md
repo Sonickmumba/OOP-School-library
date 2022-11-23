@@ -180,6 +180,10 @@ If you like this project...
 > Give credit to everyone who inspired your codebase.
 
 I would like to thank...
+- **Microverse** for giving this opportunity to learn
+- Code reviewers & coding Partners
+- Hat tip to anyone whose code was used
+- Inspiration
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
