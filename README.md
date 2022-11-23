@@ -59,14 +59,14 @@ After you're finished please remove all the comments and instructions!
 
 # 📖 [OOP School Library] <a name="about-project"></a>
 
-> Describe your project in 1 or 2 sentences.
+<!-- > Describe your project in 1 or 2 sentences. -->
 
 **[OOP School Library]** is a tool that allows a librarian in a University to record what books are in the library and who borrows them. This app will allow the librarian to add new students or teachers, add new books and save records of who borrowd a given book and when. 
 
 ## 🛠 Built With <a name="built-with">Ruby</a>
-### Tech Stack <a name="tech-stack"></a>
+<!-- ### Tech Stack <a name="tech-stack"></a> -->
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- LIVE DEMO -->
 
@@ -125,11 +125,6 @@ To run the project, execute the following command:
 ```sh
   rails server
 ```
-
-### Deployment
-
-You can deploy this project using:
-
 <!--
 Example:
 
@@ -156,7 +151,7 @@ Example:
 
 <!-- FUTURE FEATURES -->
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- CONTRIBUTING -->
 
@@ -190,7 +185,7 @@ I would like to thank...
 
 <!-- FAQ (optional) -->
 
-## ❓ FAQ <a name="faq"></a>
+<!-- ## ❓ FAQ <a name="faq"></a>
 
 > Add at least 2 questions new developers would ask when they decide to use your project.
 
@@ -202,7 +197,7 @@ I would like to thank...
 
   - [Answer_2]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- LICENSE -->
 
