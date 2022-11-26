@@ -167,3 +167,5 @@ class App
     main
   end
 end
+
+# rubocop:enable Metrics/CyclomaticComplexity
