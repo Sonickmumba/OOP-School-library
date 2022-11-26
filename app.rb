@@ -25,6 +25,7 @@ class App
     puts '7 - Exit'
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def main
     option = gets.chomp
     case option
