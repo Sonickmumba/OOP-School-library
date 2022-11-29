@@ -25,11 +25,6 @@ class App
     puts '7 - Exit'
   end
 
-  def quit_app
-    puts 'Thank you for using this app!'
-    exit 0
-  end
-
   # rubocop:disable Metrics/CyclomaticComplexity
   def choose_action
     option = gets.chomp
@@ -47,7 +42,8 @@ class App
     when '6'
       list_rentals_for_person_id
     when '7'
-      quit_app
+      puts 'Thank you for using this app!'
+      exit 0
     end
   end
 
