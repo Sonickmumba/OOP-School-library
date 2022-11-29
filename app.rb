@@ -26,7 +26,7 @@ class App
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
-  def main
+  def choose_action
     option = gets.chomp
     case option
     when '1'
@@ -71,7 +71,7 @@ class App
     puts 'Teacher created successfully'
     puts
     welcome
-    main
+    choose_action
   end
 
   def create_book
@@ -83,7 +83,7 @@ class App
     puts 'Book created successfully'
     puts
     welcome
-    main
+    choose_action
   end
 
   def create_student
@@ -106,7 +106,7 @@ class App
     puts 'Student created successfully'
     puts
     welcome
-    main
+    choose_action
   end
 
   def create_rental
@@ -126,7 +126,7 @@ class App
     puts 'Rental created successfully'
     puts
     welcome
-    main
+    choose_action
   end
 
   def list_books
@@ -137,7 +137,7 @@ class App
     end
     puts
     welcome
-    main
+    choose_action
   end
 
   def list_people
@@ -148,7 +148,7 @@ class App
     end
     puts
     welcome
-    main
+    choose_action
   end
 
   def list_rentals_for_person_id
@@ -164,7 +164,7 @@ class App
     end
     puts
     welcome
-    main
+    choose_action
   end
 end
 

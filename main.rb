@@ -5,7 +5,7 @@ def main
   puts
   app = App.new
   app.welcome
-  app.main
+  app.choose_action
 end
 
 main
