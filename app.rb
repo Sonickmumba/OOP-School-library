@@ -122,7 +122,7 @@ class App
     print 'Date: '
     date = gets.chomp
     @rentals.push(Rental.new(date, @book[book_index.to_i], @people[person_index.to_i]))
-    puts 'Rental created successfully'
+    puts 'Rental successfully created'
   end
 
   def list_books
