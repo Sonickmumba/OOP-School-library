@@ -14,11 +14,11 @@ class App
     @book = []
     @rentals = []
     @people_file = DataStore.new('person')
-    @people = @people_file.read.map do |person|
-      if person['type'] == 'Student'
-        Student.new(person['classroom'], person['age'], person['name'], parent_permission: person['parent_permission'])
+    @people = @people_file.read.map do |pn|
+      if pn['type'] == 'Student'
+        Student.new(pn['classroom'], pn['age'], pn['name'], parent_permission: pn['parent_permission'])
       else
-        Teacher.new(person['age'], person['specialization'], person['name'], parent_permission: person['parent_permission'])
+        Teacher.new(pn['age'], pn['specialization'], pn['name'], parent_permission: pn['parent_permission'])
       end
     end
     @book_file = DataStore.new('book')
