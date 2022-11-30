@@ -3,6 +3,7 @@ require './student'
 require './teacher'
 require './classroom'
 require './book'
+require './data_store'
 require './rental'
 
 class App
@@ -12,17 +13,22 @@ class App
     @people = []
     @book = []
     @rentals = []
-  end
-
-  def welcome
-    puts 'Please choose an option by entering a number:'
-    puts '1 - List all books'
-    puts '2 - List all people'
-    puts '3 - Create a person'
-    puts '4 - Create a book'
-    puts '5 - Create a rental'
-    puts '6 - List all rentals for a given person id'
-    puts '7 - Exit'
+    @people_file = DataStore.new('person')
+    @people = @people_file.read.map do |person|
+      if person['type'] == 'Student'
+        Student.new(person['classroom'], person['age'], person['name'], parent_permission: person['parent_permission'])
+      else
+        Teacher.new(person['age'], person['specialization'], person['name'], parent_permission: person['parent_permission'])
+      end
+    end
+    @book_file = DataStore.new('book')
+    @book = @book_file.read.map { |book| Book.new(book['title'], book['author']) }
+    @rentals_file = DataStore.new('rentals')
+    @rentals = @rentals_file.read.map do |rentals|
+      book = @book.select { |bok| bok.title == rentals['book_title'] }[0]
+      person = @people.select { |per| per.id == rentals['person_id'] }[0]
+      Rental.new(rentals['date'], book, person)
+    end
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
@@ -42,7 +48,9 @@ class App
     when '6'
       list_rentals_for_person_id
     when '7'
+      puts 'File successfully saved'
       puts 'Thank you for using this app!'
+      close_app
       exit 0
     end
   end
@@ -69,9 +77,6 @@ class App
     specialization = gets.chomp
     @people.push(Teacher.new(age, specialization, name, parent_permission: true))
     puts 'Teacher created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_book
@@ -81,9 +86,6 @@ class App
     author = gets.chomp
     @book.push(Book.new(title, author))
     puts 'Book created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_student
@@ -104,9 +106,6 @@ class App
       puts 'Invalid input'
     end
     puts 'Student created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_rental
@@ -124,9 +123,6 @@ class App
     date = gets.chomp
     @rentals.push(Rental.new(date, @book[book_index.to_i], @people[person_index.to_i]))
     puts 'Rental created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def list_books
@@ -135,9 +131,6 @@ class App
     else
       @book.each { |book| puts "Title: #{book.title}, Author: #{book.author}" }
     end
-    puts
-    welcome
-    choose_action
   end
 
   def list_people
@@ -146,9 +139,6 @@ class App
     else
       @people.each { |person| puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}" }
     end
-    puts
-    welcome
-    choose_action
   end
 
   def list_rentals_for_person_id
@@ -162,9 +152,20 @@ class App
         puts 'No rentals found for that ID'
       end
     end
-    puts
-    welcome
-    choose_action
+  end
+
+  def start_loop
+    loop do
+      puts
+      welcome
+      choose_action
+    end
+  end
+
+  def close_app
+    @book_file.write(@book.map(&:create_json))
+    @people_file.write(@people.map(&:create_json))
+    @rentals_file.write(@rentals.map(&:create_json))
   end
 end
 
