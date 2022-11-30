@@ -154,7 +154,7 @@ class App
     end
   end
 
-  def start_loop
+  def start_app
     loop do
       puts
       welcome
