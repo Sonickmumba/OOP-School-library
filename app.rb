@@ -3,29 +3,41 @@ require './student'
 require './teacher'
 require './classroom'
 require './book'
+require './data_store'
 require './rental'
+require 'json'
 
 class App
   attr_accessor :people, :books, :rentals
 
+  # rubocop:disable all
   def initialize
-    @people = []
-    @book = []
-    @rentals = []
-  end
+    @people_file = DataStore.new('person')
+    @people = @people_file.read.map do |pn|
+      if pn['type'] == 'Student'
+        Student.new(pn['classroom'], pn['age'], pn['name'], parent_permission: pn['parent_permission'])
+      else
+        Teacher.new(pn['age'], pn['specialization'], pn['name'], parent_permission: pn['parent_permission'])
+      end
+    end
+    @book_file = DataStore.new('book')
+    @book = @book_file.read.map { |book| Book.new(book['title'], book['author']) }
+    @rentals_file = DataStore.new('rentals')
 
-  def welcome
-    puts 'Please choose an option by entering a number:'
-    puts '1 - List all books'
-    puts '2 - List all people'
-    puts '3 - Create a person'
-    puts '4 - Create a book'
-    puts '5 - Create a rental'
-    puts '6 - List all rentals for a given person id'
-    puts '7 - Exit'
-  end
+    def result(para)
+      if para['personObj']['type'] == 'Student'
+        Student.new(para['personObj']['classroom'], para['persObj']['age'], para['persObj']['name'], parent_permission: para['persObj']['parent_permission'])
+      else
+        Teacher.new(para['personObj']['specialization'], para['personObj']['age'], para['personObj']['name'], parent_permission: para['personObj']['parent_permission'])
+      end
+    end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
+    @rentals = @rentals_file.read.map do |rentals|
+      Rental.new(rentals['date'], Book.new(rentals['bookObj']['title'], rentals['bookObj']['author']), result(rentals))
+    end
+  end
+  # rubocop:disable all
+
   def choose_action
     option = gets.chomp
     case option
@@ -42,7 +54,9 @@ class App
     when '6'
       list_rentals_for_person_id
     when '7'
+      puts 'File successfully saved'
       puts 'Thank you for using this app!'
+      close_app
       exit 0
     end
   end
@@ -69,9 +83,6 @@ class App
     specialization = gets.chomp
     @people.push(Teacher.new(age, specialization, name, parent_permission: true))
     puts 'Teacher created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_book
@@ -81,9 +92,6 @@ class App
     author = gets.chomp
     @book.push(Book.new(title, author))
     puts 'Book created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_student
@@ -104,9 +112,6 @@ class App
       puts 'Invalid input'
     end
     puts 'Student created successfully'
-    puts
-    welcome
-    choose_action
   end
 
   def create_rental
@@ -123,10 +128,7 @@ class App
     print 'Date: '
     date = gets.chomp
     @rentals.push(Rental.new(date, @book[book_index.to_i], @people[person_index.to_i]))
-    puts 'Rental created successfully'
-    puts
-    welcome
-    choose_action
+    puts 'Rental successfully created'
   end
 
   def list_books
@@ -135,9 +137,6 @@ class App
     else
       @book.each { |book| puts "Title: #{book.title}, Author: #{book.author}" }
     end
-    puts
-    welcome
-    choose_action
   end
 
   def list_people
@@ -146,9 +145,6 @@ class App
     else
       @people.each { |person| puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}" }
     end
-    puts
-    welcome
-    choose_action
   end
 
   def list_rentals_for_person_id
@@ -162,10 +158,19 @@ class App
         puts 'No rentals found for that ID'
       end
     end
-    puts
-    welcome
-    choose_action
+  end
+
+  def start_app
+    loop do
+      puts
+      welcome
+      choose_action
+    end
+  end
+
+  def close_app
+    @book_file.write(@book.map(&:create_json))
+    @people_file.write(@people.map(&:create_json))
+    @rentals_file.write(@rentals.map(&:create_json))
   end
 end
-
-# rubocop:enable Metrics/CyclomaticComplexity
