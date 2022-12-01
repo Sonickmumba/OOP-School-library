@@ -9,7 +9,7 @@ require 'json'
 
 class App
   attr_accessor :people, :books, :rentals
-
+  # rubocop:enable all
   def initialize
     @people_file = DataStore.new('person')
     @people = @people_file.read.map do |pn|
@@ -35,6 +35,7 @@ class App
       Rental.new(rentals['date'], Book.new(rentals['bookObj']['title'], rentals['bookObj']['author']), result(rentals))
     end
   end
+  # rubocop:enable all
 
   # rubocop:disable Metrics/CyclomaticComplexity
   def choose_action
