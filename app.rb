@@ -9,7 +9,8 @@ require 'json'
 
 class App
   attr_accessor :people, :books, :rentals
-  # rubocop:enable all
+
+  # rubocop:disable all
   def initialize
     @people_file = DataStore.new('person')
     @people = @people_file.read.map do |pn|
@@ -22,7 +23,7 @@ class App
     @book_file = DataStore.new('book')
     @book = @book_file.read.map { |book| Book.new(book['title'], book['author']) }
     @rentals_file = DataStore.new('rentals')
-    # rubocop:disable all
+
     def result(para)
       if para['personObj']['type'] == 'Student'
         Student.new(para['personObj']['classroom'], para['persObj']['age'], para['persObj']['name'], parent_permission: para['persObj']['parent_permission'])
@@ -30,14 +31,13 @@ class App
         Teacher.new(para['personObj']['specialization'], para['personObj']['age'], para['personObj']['name'], parent_permission: para['personObj']['parent_permission'])
       end
     end
-    # rubocop:enable all
+
     @rentals = @rentals_file.read.map do |rentals|
       Rental.new(rentals['date'], Book.new(rentals['bookObj']['title'], rentals['bookObj']['author']), result(rentals))
     end
   end
-  # rubocop:enable all
+  # rubocop:disable all
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def choose_action
     option = gets.chomp
     case option
@@ -174,4 +174,3 @@ class App
     @rentals_file.write(@rentals.map(&:create_json))
   end
 end
-# rubocop:enable Metrics/CyclomaticComplexity
