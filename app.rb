@@ -5,6 +5,7 @@ require './classroom'
 require './book'
 require './data_store'
 require './rental'
+require 'json'
 
 class App
   attr_accessor :people, :books, :rentals
@@ -24,10 +25,20 @@ class App
     @book_file = DataStore.new('book')
     @book = @book_file.read.map { |book| Book.new(book['title'], book['author']) }
     @rentals_file = DataStore.new('rentals')
+    # rubocop:disable all
+    def result(para)
+      if para['personObj']['type'] == 'Student'
+        Student.new(para['personObj']['classroom'], para['persObj']['age'], para['persObj']['name'],
+                    parent_permission: para['persObj']['parent_permission'])
+      else
+        Teacher.new(para['personObj']['specialization'], para['personObj']['age'], para['personObj']['name'],
+                    parent_permission: para['personObj']['parent_permission'])
+      end
+    end
+    # rubocop:enable all
+
     @rentals = @rentals_file.read.map do |rentals|
-      book = @book.select { |bok| bok.title == rentals['book_title'] }[0]
-      person = @people.select { |per| per.id == rentals['person_id'] }[0]
-      Rental.new(rentals['date'], book, person)
+      Rental.new(rentals['date'], Book.new(rentals['bookObj']['title'], rentals['bookObj']['author']), result(rentals))
     end
   end
 
