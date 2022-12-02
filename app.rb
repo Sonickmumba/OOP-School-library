@@ -7,11 +7,14 @@ require './data_store'
 require './rental'
 require 'json'
 
+# rubocop:disable all
 class App
   attr_accessor :people, :books, :rentals
 
-  # rubocop:disable all
   def initialize
+    @book = []
+    @people = []
+    @rentals = []
     @people_file = DataStore.new('person')
     @people = @people_file.read.map do |pn|
       if pn['type'] == 'Student'
@@ -23,7 +26,6 @@ class App
     @book_file = DataStore.new('book')
     @book = @book_file.read.map { |book| Book.new(book['title'], book['author']) }
     @rentals_file = DataStore.new('rentals')
-
     def result(para)
       if para['personObj']['type'] == 'Student'
         Student.new(para['personObj']['classroom'], para['persObj']['age'], para['persObj']['name'], parent_permission: para['persObj']['parent_permission'])
@@ -31,12 +33,10 @@ class App
         Teacher.new(para['personObj']['specialization'], para['personObj']['age'], para['personObj']['name'], parent_permission: para['personObj']['parent_permission'])
       end
     end
-
     @rentals = @rentals_file.read.map do |rentals|
       Rental.new(rentals['date'], Book.new(rentals['bookObj']['title'], rentals['bookObj']['author']), result(rentals))
     end
   end
-  # rubocop:disable all
 
   def choose_action
     option = gets.chomp
@@ -143,7 +143,7 @@ class App
     if @people.empty?
       puts 'No people found'
     else
-      @people.each { |person| puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}" }
+      @people.each { |person| puts "[#{person.class}] Name: #{person.age}, ID: #{person.id}, Age: #{person.name}" }
     end
   end
 
@@ -174,3 +174,4 @@ class App
     @rentals_file.write(@rentals.map(&:create_json))
   end
 end
+# rubocop:disable all
