@@ -1,16 +1,17 @@
 require './teacher'
 
 describe Teacher do
-  let(:teacher) { Teacher.new(40, 'Math', 'Mane') }
-  context 'when creating a new teacher' do
-    it 'has a specialization' do
-      expect(teacher.specialization).to eq('Math')
-    end
-    it 'has an age' do
-      expect(teacher.age).to eq(40)
-    end
-    it 'has a name' do
-      expect(teacher.name).to eq('Mane')
-    end
+  before :each do
+    @teacher = Teacher.new(40, 'Math', 'Mane', parent_permission: true)
+  end
+
+  it 'Teacher name should be Mane' do
+    expect(@teacher.name).to eq('Mane')
+    expect(@teacher.name).not_to eq('John')
+    expect(@teacher.age).to be > 20
+  end
+
+  it 'Teacher can use services' do
+    expect(@teacher.can_use_service?).to be true
   end
 end

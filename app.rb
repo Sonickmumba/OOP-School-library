@@ -143,7 +143,7 @@ class App
     if @people.empty?
       puts 'No people found'
     else
-      @people.each { |person| puts "[#{person.class}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}" }
+      @people.each { |person| puts "[#{person.class}] Name: #{person.age}, ID: #{person.id}, Age: #{person.name}" }
     end
   end
 
